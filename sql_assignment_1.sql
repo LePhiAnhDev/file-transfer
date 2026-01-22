@@ -1,28 +1,44 @@
 – ========================================
 – BÀI TẬP QUẢN LÝ NHÂN VIÊN - ASSIGNMENT 1
+– CÚ PHÁP SQL SERVER
 – ========================================
 
 – Tạo database
-CREATE DATABASE IF NOT EXISTS QLNV;
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = ‘QLNV’)
+BEGIN
+CREATE DATABASE QLNV;
+END
+GO
+
 USE QLNV;
+GO
 
 – ========================================
 – CÂU 1: TẠO CÁC BẢNG DỮ LIỆU
 – ========================================
 
 – Bảng Phong: Lưu trữ thông tin về các phòng ban
+IF OBJECT_ID(‘TDNN’, ‘U’) IS NOT NULL DROP TABLE TDNN;
+IF OBJECT_ID(‘NhanVien’, ‘U’) IS NOT NULL DROP TABLE NhanVien;
+IF OBJECT_ID(‘Phong’, ‘U’) IS NOT NULL DROP TABLE Phong;
+IF OBJECT_ID(‘DMNN’, ‘U’) IS NOT NULL DROP TABLE DMNN;
+IF OBJECT_ID(‘NGHI_HUU’, ‘U’) IS NOT NULL DROP TABLE NGHI_HUU;
+GO
+
 CREATE TABLE Phong (
 maph CHAR(3) PRIMARY KEY,
 tenph NVARCHAR(40) NOT NULL,
 diachi NVARCHAR(50),
 tel CHAR(10)
 );
+GO
 
 – Bảng DMNN: Danh mục ngoại ngữ
 CREATE TABLE DMNN (
 mann CHAR(2) PRIMARY KEY,
 tennn NVARCHAR(20) NOT NULL
 );
+GO
 
 – Bảng NhanVien: Lưu trữ thông tin các nhân viên
 CREATE TABLE NhanVien (
@@ -36,6 +52,7 @@ sdt CHAR(10),
 ngaybc DATE,
 FOREIGN KEY (maph) REFERENCES Phong(maph)
 );
+GO
 
 – Bảng TDNN: Trình độ ngoại ngữ của nhân viên
 CREATE TABLE TDNN (
@@ -46,6 +63,7 @@ PRIMARY KEY (manv, mann),
 FOREIGN KEY (manv) REFERENCES NhanVien(manv),
 FOREIGN KEY (mann) REFERENCES DMNN(mann)
 );
+GO
 
 – ========================================
 – NHẬP DỮ LIỆU VÀO CÁC BẢNG
@@ -57,6 +75,7 @@ INSERT INTO Phong (maph, tenph, diachi, tel) VALUES
 (‘KDA’, N’Kinh doanh’, N’371 NK’, ‘0362517395’),
 (‘KTA’, N’Kỹ thuật’, N’371 NK’, ‘0362567401’),
 (‘QTA’, N’Quản trị’, N’371 NK’, ‘0362565788’);
+GO
 
 – Nhập dữ liệu bảng DMNN
 INSERT INTO DMNN (mann, tennn) VALUES
@@ -66,6 +85,7 @@ INSERT INTO DMNN (mann, tennn) VALUES
 (‘04’, N’Nhật’),
 (‘05’, N’Trung Quốc’),
 (‘06’, N’Hàn Quốc’);
+GO
 
 – Nhập dữ liệu bảng NhanVien
 INSERT INTO NhanVien (manv, hoten, gioitinh, ngaysinh, luong, maph, sdt, ngaybc) VALUES
@@ -86,6 +106,7 @@ INSERT INTO NhanVien (manv, hoten, gioitinh, ngaysinh, luong, maph, sdt, ngaybc)
 (‘KT008’, N’Lê Thu Trang’, N’Nữ’, ‘1970-06-07’, 7500000, ‘KTA’, NULL, ‘2018-02-08’),
 (‘KT009’, N’Khúc Nam Hải’, N’Nam’, ‘1980-07-22’, 7000000, ‘KTA’, NULL, ‘2015-01-01’),
 (‘TT002’, N’Phùng Trung Dũng’, N’Nam’, ‘1978-08-28’, 7200000, NULL, NULL, ‘2012-09-24’);
+GO
 
 – Nhập dữ liệu bảng TDNN
 INSERT INTO TDNN (manv, mann, tdo) VALUES
@@ -104,6 +125,7 @@ INSERT INTO TDNN (manv, mann, tdo) VALUES
 (‘KT006’, ‘01’, ‘B’), (‘KT006’, ‘03’, ‘C’),
 (‘KT008’, ‘01’, ‘B’), (‘KT008’, ‘02’, ‘D’), (‘KT008’, ‘03’, ‘A’),
 (‘TT002’, ‘01’, ‘B’), (‘TT002’, ‘02’, ‘C’), (‘TT002’, ‘03’, ‘A’), (‘TT002’, ‘04’, ‘D’);
+GO
 
 – ========================================
 – CÂU 2: KIỂM TRA VÀ BỔ SUNG RÀNG BUỘC
@@ -116,11 +138,12 @@ INSERT INTO TDNN (manv, mann, tdo) VALUES
 – ========================================
 
 INSERT INTO NhanVien (manv, hoten, gioitinh, ngaysinh, luong, maph, sdt, ngaybc)
-VALUES (‘QT001’, N’Tên của bạn’, N’Nam’, ‘1990-01-01’, 9500000, ‘QTA’, NULL, CURDATE());
+VALUES (‘QT001’, N’Tên của bạn’, N’Nam’, ‘1990-01-01’, 9500000, ‘QTA’, NULL, GETDATE());
 
 INSERT INTO TDNN (manv, mann, tdo) VALUES
 (‘QT001’, ‘01’, ‘C’),  – Tiếng Anh trình độ C
 (‘QT001’, ‘04’, ‘A’);  – Tiếng Nhật trình độ A
+GO
 
 – ========================================
 – CÂU 4: TÌM THÔNG TIN NHÂN VIÊN KD001
@@ -129,14 +152,16 @@ INSERT INTO TDNN (manv, mann, tdo) VALUES
 SELECT manv, hoten, maph, luong
 FROM NhanVien
 WHERE manv = ‘KD001’;
+GO
 
 – ========================================
 – CÂU 5: TÌM NHÂN VIÊN DƯỚI 32 TUỔI
 – ========================================
 
-SELECT *, YEAR(CURDATE()) - YEAR(ngaysinh) AS tuoi
+SELECT *, YEAR(GETDATE()) - YEAR(ngaysinh) AS tuoi
 FROM NhanVien
-WHERE YEAR(CURDATE()) - YEAR(ngaysinh) < 32;
+WHERE YEAR(GETDATE()) - YEAR(ngaysinh) < 32;
+GO
 
 – ========================================
 – CÂU 6: NHÂN VIÊN CÓ NGOẠI NGỮ 01 TRÌNH ĐỘ C TRỞ LÊN
@@ -146,23 +171,26 @@ SELECT DISTINCT nv.*
 FROM NhanVien nv
 JOIN TDNN td ON nv.manv = td.manv
 WHERE td.mann = ‘01’ AND td.tdo IN (‘A’, ‘B’, ‘C’);
+GO
 
 – ========================================
 – CÂU 7: NHÂN VIÊN ĐÃ VÀO BIÊN CHẾ HƠN 10 NĂM
 – ========================================
 
-SELECT *, YEAR(CURDATE()) - YEAR(ngaybc) AS sonambc
+SELECT *, YEAR(GETDATE()) - YEAR(ngaybc) AS sonambc
 FROM NhanVien
-WHERE YEAR(CURDATE()) - YEAR(ngaybc) > 10;
+WHERE YEAR(GETDATE()) - YEAR(ngaybc) > 10;
+GO
 
 – ========================================
 – CÂU 8: NHÂN VIÊN ĐỦ TUỔI NGHỈ HƯU
 – ========================================
 
-SELECT *, YEAR(CURDATE()) - YEAR(ngaysinh) AS tuoi
+SELECT *, YEAR(GETDATE()) - YEAR(ngaysinh) AS tuoi
 FROM NhanVien
-WHERE (gioitinh = N’Nam’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 60)
-OR (gioitinh = N’Nữ’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 55);
+WHERE (gioitinh = N’Nam’ AND YEAR(GETDATE()) - YEAR(ngaysinh) >= 60)
+OR (gioitinh = N’Nữ’ AND YEAR(GETDATE()) - YEAR(ngaysinh) >= 55);
+GO
 
 – ========================================
 – CÂU 9: NHÂN VIÊN CÓ LƯƠNG 7-8 TRIỆU
@@ -171,6 +199,7 @@ OR (gioitinh = N’Nữ’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 55);
 SELECT manv, hoten, ngaysinh, luong
 FROM NhanVien
 WHERE luong BETWEEN 7000000 AND 8000000;
+GO
 
 – ========================================
 – CÂU 10: DANH SÁCH NHÂN VIÊN TĂNG DẦN THEO LƯƠNG
@@ -179,6 +208,7 @@ WHERE luong BETWEEN 7000000 AND 8000000;
 SELECT *
 FROM NhanVien
 ORDER BY luong ASC;
+GO
 
 – ========================================
 – CÂU 11: TỔNG SỐ NHÂN VIÊN VÀ LƯƠNG TB PHÒNG KINH DOANH
@@ -187,6 +217,7 @@ ORDER BY luong ASC;
 SELECT COUNT(*) AS TongSoNV, AVG(luong) AS LuongTrungBinh
 FROM NhanVien
 WHERE maph = ‘KDA’;
+GO
 
 – ========================================
 – CÂU 12: DANH SÁCH MÃ NV, HỌ TÊN, MÃ PHÒNG, TÊN PHÒNG
@@ -195,17 +226,19 @@ WHERE maph = ‘KDA’;
 SELECT nv.manv, nv.hoten, nv.maph, p.tenph
 FROM NhanVien nv
 LEFT JOIN Phong p ON nv.maph = p.maph;
+GO
 
 – ========================================
 – CÂU 13: NHÂN VIÊN CÓ TUỔI LỚN HƠN ĐỘ TUỔI TRUNG BÌNH
 – ========================================
 
-SELECT *, YEAR(CURDATE()) - YEAR(ngaysinh) AS tuoi
+SELECT *, YEAR(GETDATE()) - YEAR(ngaysinh) AS tuoi
 FROM NhanVien
-WHERE YEAR(CURDATE()) - YEAR(ngaysinh) > (
-SELECT AVG(YEAR(CURDATE()) - YEAR(ngaysinh))
+WHERE YEAR(GETDATE()) - YEAR(ngaysinh) > (
+SELECT AVG(YEAR(GETDATE()) - YEAR(ngaysinh))
 FROM NhanVien
 );
+GO
 
 – ========================================
 – CÂU 14: NHÂN VIÊN CÓ NHIỀU HƠN 2 NGOẠI NGỮ
@@ -216,6 +249,7 @@ FROM NhanVien nv
 JOIN TDNN td ON nv.manv = td.manv
 GROUP BY nv.manv, nv.hoten
 HAVING COUNT(td.mann) > 2;
+GO
 
 – ========================================
 – CÂU 15: NHÂN VIÊN VÀO BIÊN CHẾ TRƯỚC 1/1/2017 PHÒNG KỸ THUẬT/KINH DOANH
@@ -225,6 +259,7 @@ SELECT *
 FROM NhanVien
 WHERE ngaybc < ‘2017-01-01’
 AND maph IN (‘KTA’, ‘KDA’);
+GO
 
 – ========================================
 – CÂU 16: SẮP XẾP THEO TÊN TĂNG DẦN, TRÙNG THÌ GIẢM DẦN THEO NGÀY SINH
@@ -233,8 +268,9 @@ AND maph IN (‘KTA’, ‘KDA’);
 SELECT *
 FROM NhanVien
 ORDER BY
-SUBSTRING_INDEX(hoten, ’ ’, -1) ASC,
+RIGHT(hoten, CHARINDEX(’ ’, REVERSE(hoten) + ’ ’) - 1) ASC,
 ngaysinh DESC;
+GO
 
 – ========================================
 – CÂU 17: NHÂN VIÊN HỌC TIẾNG ANH HOẶC PHÁP, TRÌNH ĐỘ C TRỞ LÊN
@@ -246,6 +282,7 @@ JOIN TDNN td ON nv.manv = td.manv
 JOIN DMNN nn ON td.mann = nn.mann
 WHERE td.mann IN (‘01’, ‘03’)
 AND td.tdo IN (‘A’, ‘B’, ‘C’);
+GO
 
 – ========================================
 – CÂU 18: NGOẠI NGỮ CHƯA CÓ NHÂN VIÊN HỌC
@@ -255,6 +292,7 @@ SELECT nn.*
 FROM DMNN nn
 LEFT JOIN TDNN td ON nn.mann = td.mann
 WHERE td.mann IS NULL;
+GO
 
 – ========================================
 – CÂU 19: NHÂN VIÊN CHƯA HỌC BẤT KỲ NGOẠI NGỮ NÀO
@@ -264,6 +302,7 @@ SELECT nv.*
 FROM NhanVien nv
 LEFT JOIN TDNN td ON nv.manv = td.manv
 WHERE td.manv IS NULL;
+GO
 
 – ========================================
 – CÂU 20: NHÂN VIÊN BIẾT TỪ 3 NGOẠI NGỮ TRỞ LÊN
@@ -274,6 +313,7 @@ FROM NhanVien nv
 JOIN TDNN td ON nv.manv = td.manv
 GROUP BY nv.manv, nv.hoten
 HAVING COUNT(td.mann) >= 3;
+GO
 
 – ========================================
 – CÂU 21: TĂNG LƯƠNG NHÂN VIÊN PHÒNG KỸ THUẬT 15%
@@ -282,11 +322,13 @@ HAVING COUNT(td.mann) >= 3;
 UPDATE NhanVien
 SET luong = luong * 1.15
 WHERE maph = ‘KTA’;
+GO
 
 – Kiểm tra kết quả
 SELECT manv, hoten, maph, luong
 FROM NhanVien
 WHERE maph = ‘KTA’;
+GO
 
 – ========================================
 – CÂU 22: TẠO BẢNG NGHI_HUU VÀ CHUYỂN DỮ LIỆU
@@ -303,19 +345,23 @@ maph CHAR(3),
 sdt CHAR(10),
 ngaybc DATE
 );
+GO
 
 – Chuyển nhân viên đủ tuổi nghỉ hưu vào bảng NGHI_HUU
 INSERT INTO NGHI_HUU
 SELECT *
 FROM NhanVien
-WHERE (gioitinh = N’Nam’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 60)
-OR (gioitinh = N’Nữ’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 55);
+WHERE (gioitinh = N’Nam’ AND YEAR(GETDATE()) - YEAR(ngaysinh) >= 60)
+OR (gioitinh = N’Nữ’ AND YEAR(GETDATE()) - YEAR(ngaysinh) >= 55);
+GO
 
 – Xóa nhân viên đã nghỉ hưu khỏi bảng NhanVien
 DELETE FROM NhanVien
-WHERE (gioitinh = N’Nam’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 60)
-OR (gioitinh = N’Nữ’ AND YEAR(CURDATE()) - YEAR(ngaysinh) >= 55);
+WHERE (gioitinh = N’Nam’ AND YEAR(GETDATE()) - YEAR(ngaysinh) >= 60)
+OR (gioitinh = N’Nữ’ AND YEAR(GETDATE()) - YEAR(ngaysinh) >= 55);
+GO
 
 – Kiểm tra kết quả
 SELECT * FROM NGHI_HUU;
 SELECT * FROM NhanVien;
+GO
