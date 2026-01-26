@@ -1,0 +1,39 @@
+body {
+    font-family: Tahoma;
+    font-size: 12px;
+}
+
+.title {
+    text-align: center;
+    color: #CC0033;
+}
+
+table {
+    width: 100%;
+    border: 1px solid #CC0033;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid #CC0033;
+    padding: 6px;
+}
+
+.header {
+    background-color: #CC0033;
+    color: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+}
+
+.group {
+    text-align: center;
+    vertical-align: middle;
+    color: #CC0033;
+    font-weight: bold;
+}
+
+.footer {
+    text-align: center;
+    font-weight: bold;
+}
