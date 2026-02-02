@@ -1,64 +1,86 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Restaurant Gallery</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  </head>
+  <body>
+    <header class="header-area">
+      <nav class="navbar container">
+        <div class="logo">
+          <a href="#"><img src="assets/logo.png" alt="Logo" /></a>
+        </div>
+        <ul class="menu">
+          <li class="menu-item"><a href="#">Trang Chủ</a></li>
+          <li class="menu-item"><a href="#">Thực Đơn</a></li>
+          <li class="menu-item"><a href="#">Giới Thiệu</a></li>
+          <li class="menu-item"><a href="#">Liên Hệ</a></li>
+          <li class="menu-item"><a href="#">Tin Tức</a></li>
+        </ul>
+        <div class="datlich">
+          <a href="#" class="datlich-btn">Đặt Lịch Ngay</a>
+        </div>
+      </nav>
+    </header>
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="logo">Restaurant</div>
-    <nav>
-      <a href="#">Trang Chủ</a>
-      <a href="#">Thực Đơn</a>
-      <a href="#">Giới Thiệu</a>
-      <a href="#">Liên Hệ</a>
-      <a href="#">Tin Tức</a>
-    </nav>
-    <button class="btn">Đặt Lịch Ngay</button>
-  </header>
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>GALLERY</h1>
+            <p>TAKE A LOOK INSIDE</p>
+        </div>
+    </section>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>GALLERY</h1>
-      <p>TAKE A LOOK INSIDE</p>
-    </div>
-  </section>
+    <section class="gallery-section container">
+        <div class="gallery-grid">
+            <div class="gallery-item item-large">
+                <img src="assets/gallery-1.jpg" alt="Croissant">
+            </div>
+            <div class="gallery-item"><img src="assets/gallery-2.jpg" alt="Burger"></div>
+            <div class="gallery-item"><img src="assets/gallery-3.jpg" alt="Fries"></div>
+            <div class="gallery-item"><img src="assets/gallery-4.jpg" alt="Condiments"></div>
+            <div class="gallery-item"><img src="assets/gallery-5.jpg" alt="Cheers"></div>
+            <div class="gallery-item"><img src="assets/gallery-6.jpg" alt="Lanterns"></div>
+            <div class="gallery-item"><img src="assets/gallery-7.jpg" alt="Yogurt"></div>
+        </div>
+    </section>
 
-  <!-- GALLERY -->
-  <section class="gallery">
-    <img src="assets/food1.jpg" class="large">
-    <img src="assets/food2.jpg">
-    <img src="assets/food3.jpg">
-    <img src="assets/food4.jpg">
-    <img src="assets/food5.jpg">
-    <img src="assets/food6.jpg">
-  </section>
+    <footer class="footer-area">
+        <div class="container footer-content">
+            <div class="footer-col service-col">
+                <div class="footer-icon">
+                    <img src="assets/footer-icon.png" alt="Service Icon">
+                </div>
+                <div class="footer-text">
+                    <h3>Dịch Vụ</h3>
+                    <ul>
+                        <li><a href="#">Khai vị</a></li>
+                        <li><a href="#">Súp</a></li>
+                        <li><a href="#">Món ăn chay</a></li>
+                    </ul>
+                </div>
+            </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div>
-      <h3>Dịch Vụ</h3>
-      <p>Khai vị</p>
-      <p>Súp</p>
-      <p>Món ăn chay</p>
-    </div>
+            <div class="footer-col contact-col">
+                <h3>Liên Hệ</h3>
+                <p>Địa chỉ: 123 Đường Ví Dụ, Thành phố Ví Dụ</p>
+                <p>Email: info@example.com</p>
+                <p>Điện thoại: +84 123 456 789</p>
+            </div>
 
-    <div>
-      <h3>Liên Hệ</h3>
-      <p>123 Đường Ví Dụ</p>
-      <p>Email: info@example.com</p>
-      <p>Điện thoại: +84 123 456 789</p>
-    </div>
+            <div class="footer-col social-col">
+                <h3>Kết Nối</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-    <div>
-      <h3>Kết Nối</h3>
-      <p>Facebook • Twitter • Instagram</p>
-    </div>
-  </footer>
-
-</body>
+  </body>
 </html>
